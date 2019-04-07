@@ -1,5 +1,7 @@
+package Homework1;
+
 public class HW1 {
-    static double getMinimum(double[] list) {
+    public static double getMinimum(double[] list) {
         double minimum = list[0];
         for (int i = 0; i < list.length; i++) {
             if (list[i] < minimum) { minimum = list[i]; }
@@ -7,7 +9,7 @@ public class HW1 {
         return minimum;
     }
 
-    static int getMinimumsIndex(double[] list) {
+    public static int getMinimumsIndex(double[] list) {
         int minimumIndex = 0;
         for (int i = 0; i < list.length; i++) {
             if (list[i] < list[minimumIndex]) { minimumIndex = i; }
@@ -15,7 +17,7 @@ public class HW1 {
         return minimumIndex;
     }
 
-    static int getDistanceBetweenMinimumsAndMaximumsPosition(double[] list) {
+    public static int getDistanceBetweenMinimumsAndMaximumsPosition(double[] list) {
         int minimumsIndex = 0;
         int maximumsIndex = 0;
         for (int i = 0; i < list.length; i++) {
@@ -28,7 +30,7 @@ public class HW1 {
     }
 
     // assume list is sorted
-    static int countUniqueValues(double[] list) {
+    public static int countUniqueValues(double[] list) {
         if (list.length == 0) { return 0; }
         int uniqueCount = 1;
         for (int i = 1; i < list.length; i++) {
@@ -38,7 +40,7 @@ public class HW1 {
     }
 
     // assume list is sorted.
-    static double[] getSet(double[] list) {
+    public static double[] getSet(double[] list) {
         if (list.length == 0) { return new double[] {}; }
         int setSize = countUniqueValues(list);
         double[] set = new double[setSize];
@@ -55,7 +57,7 @@ public class HW1 {
         return set;
     }
 
-    static boolean equals(double[] a, double[] b) {
+    public static boolean equals(double[] a, double[] b) {
         if (a.length != b.length) { return false; }
         for (int i = 0; i < a.length; i++) {
             if (a[i] != b[i]) { return false; }
@@ -63,7 +65,7 @@ public class HW1 {
         return true;
     }
 
-    static void testGetSet() {
+    private static void testGetSet() {
         double[] emptyList = new double[] {};
         double[] unity = new double[] {1};
         double[] legion = new double[] {1, 1, 1, 1, 1};
@@ -82,7 +84,7 @@ public class HW1 {
         assert equals(getSet(repetitiveOrderedList), orderedList);
     }
 
-    static void testUniqueCount() {
+    private static void testUniqueCount() {
         double[] emptyList = new double[] {};
         double[] unity = new double[] {1};
         double[] legion = new double[] {1, 1, 1, 1, 1};
@@ -99,21 +101,21 @@ public class HW1 {
         assert countUniqueValues(orderedList) == 7;
     }
 
-    static void testGetMinimum() {
+    private static void testGetMinimum() {
         assert getMinimum(new double[] {-7}) == -7;
         assert getMinimum(new double[] {1, -4, -7, 7, 8, 11}) == -7;
         assert getMinimum(new double[] {-13, -4, -7, 7, 8, 11}) == -13;
         assert getMinimum(new double[] {1, -4, -7, 7, 8, 11, -9}) == -9;
     }
 
-    static void testGetMinimumsIndex() {
+    private static void testGetMinimumsIndex() {
         assert 0 == getMinimumsIndex(new double[] { -7 });
         assert 2 == getMinimumsIndex(new double[] { 1, -4, -7, 7, 8, 11 });
         assert 0 == getMinimumsIndex(new double[] {-13, -4, -7, 7, 8, 11});
         assert 6 == getMinimumsIndex(new double[] {1, -4, -7, 7, 8, 11, -9});
     }
 
-    static void testGetDistanceBetweenMinimumsAndMaximumsPosition() {
+    private static void testGetDistanceBetweenMinimumsAndMaximumsPosition() {
         assert 0 == getDistanceBetweenMinimumsAndMaximumsPosition(new double[] {-7});
         assert 3 == getDistanceBetweenMinimumsAndMaximumsPosition(new double[] {1, -4, -7, 7, 8, 11});
         assert 5 == getDistanceBetweenMinimumsAndMaximumsPosition(new double[] {-13, -4, -7, 7, 8, 11});
