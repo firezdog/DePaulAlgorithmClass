@@ -1,6 +1,7 @@
+package Homework1;
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-import Homework1.HW1;
 
 class HW1Test {
 
@@ -75,4 +76,5 @@ class HW1Test {
         assertFalse(HW1.equals(new double[] {1, 2, 3, 4}, new double[] {1, 2, 3}));
         assertFalse(HW1.equals(new double[] {1, 2, 3, 5}, new double[] {1, 2, 3, 4}));
     }
+
 }
