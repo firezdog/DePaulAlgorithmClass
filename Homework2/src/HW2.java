@@ -96,6 +96,8 @@ class HW2 {
      *
      * Comment: the code uses "long" variables, which are like "int", but
      * bigger. It's because fibonacci numbers get really big really fast.
+     *
+     * Comment on comment: in fact, too big for long?
      */
     public static void runTerrible () {
         for (int N = 0; N < 100; N++)
