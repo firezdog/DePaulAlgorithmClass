@@ -180,6 +180,7 @@ public class MyLinked {
         myassert("testMax -- in the middle: max == 5", b.maxRecursive() == 5);
     }
     private static void testDelete () {
+        // TODO: add assertions
         MyLinked b = new MyLinked ();
         b.add (1);
         print ("singleton", b);
@@ -197,6 +198,7 @@ public class MyLinked {
         print ("deleted in middle", b);
     }
     private static void testReverse () {
+        // TODO: add assertions
         MyLinked b = new MyLinked ();
         b.reverse ();
         print ("reverse empty", b);
@@ -219,6 +221,7 @@ public class MyLinked {
         print ("reversed", b);
     }
     private static void testRemove () {
+        // TODO: add assertions
         MyLinked b = new MyLinked ();
         b.remove (4);
         print ("removed 4 from empty", b);
@@ -256,7 +259,7 @@ public class MyLinked {
         // testMaxRecursive ();
         // testDelete ();
         // testReverse ();
-        testRemove ();
+        // testRemove ();
     }
 }
 
