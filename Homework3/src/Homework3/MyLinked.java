@@ -83,7 +83,19 @@ public class MyLinked {
 
     // reverse the list "in place"... without creating any new nodes
     public void reverse () {
-        // TODO 1.3.30
+        if (N < 2) return;
+        Node prev = first;
+        Node curr = prev.next;
+        prev.next = null;
+        // curr is always the head of our new chain -- at the end of each step, nothing connects to it.
+        while (curr.next != null) {
+            Node temp = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = temp;
+        }
+        first = curr;
+        first.next = prev;
         checkInvariants ();
     }
 
@@ -223,8 +235,8 @@ public class MyLinked {
     public static void main (String args[]) {
         // testMax ();
         // testMaxRecursive ();
-        testDelete ();
-        // testReverse ();
+        // testDelete ();
+        testReverse ();
         // testRemove ();
     }
 }
