@@ -101,7 +101,26 @@ public class MyLinked {
 
     // remove 
     public void remove (double item) {
-        // TODO 1.3.26
+        if (N == 0) return;
+        while (N > 0 && first.item == item) {
+            first = first.next;
+            N--;
+        }
+        if (N > 0) {
+            Node prev = first;
+            Node curr = first.next;
+            while (curr != null) {
+                if (curr.item != item) {
+                    prev = curr;
+                    curr = curr.next;
+                    continue;
+                }
+                Node temp = curr.next;
+                curr = temp;
+                prev.next = curr;
+                N--;
+            }
+        }
         checkInvariants ();
     }
 
@@ -236,8 +255,8 @@ public class MyLinked {
         // testMax ();
         // testMaxRecursive ();
         // testDelete ();
-        testReverse ();
-        // testRemove ();
+        // testReverse ();
+        testRemove ();
     }
 }
 
