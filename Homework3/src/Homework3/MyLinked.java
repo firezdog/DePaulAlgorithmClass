@@ -125,6 +125,14 @@ public class MyLinked {
     }
 
 
+    private static String toString(MyLinked b) {
+        String s = "";
+        for (Node x = b.first; x != null; x = x.next) {
+            s += String.format("%.2f ", x.item);
+        }
+        return s;
+    }
+
     private static void print (String s, MyLinked b) {
         StdOut.print (s + ": ");
         for (Node x = b.first; x != null; x = x.next)
@@ -186,32 +194,40 @@ public class MyLinked {
         print ("singleton", b);
         b.delete (0);
         print ("deleted", b);
+        myassert("delete from singleton", toString(b).equals(""));
         for (double i = 1; i < 13; i++) {
             b.add (i);
         }
         print ("bigger list", b);
         b.delete (0);
+        myassert("delete beginning", toString(b).equals("11.00 10.00 9.00 8.00 7.00 6.00 5.00 4.00 3.00 2.00 1.00 "));
         print ("deleted at beginning", b);
         b.delete (10);
+        myassert("delete end", toString(b).equals("11.00 10.00 9.00 8.00 7.00 6.00 5.00 4.00 3.00 2.00 "));
         print ("deleted at end", b);
         b.delete (4);
         print ("deleted in middle", b);
+        myassert("delete middle", toString(b).equals("11.00 10.00 9.00 8.00 6.00 5.00 4.00 3.00 2.00 "));
     }
     private static void testReverse () {
         // TODO: add assertions
         MyLinked b = new MyLinked ();
         b.reverse ();
         print ("reverse empty", b);
+        myassert("reverse empty", toString(b).equals(""));
         b.add (1);
         print ("singleton", b);
         b.reverse ();
         print ("reverse singleton", b);
+        myassert("reverse singleton", toString(b).equals("1.00 "));
         b.add (2);
         print ("two", b);
         b.reverse ();
         print ("reverse two", b);
+        myassert("reverse two", toString(b).equals("1.00 2.00 "));
         b.reverse ();
         print ("reverse again", b);
+        myassert("reverse two", toString(b).equals("2.00 1.00 "));
         for (double i = 3; i < 7; i++) {
             b.add (i);
             b.add (i);
@@ -219,17 +235,21 @@ public class MyLinked {
         print ("bigger list", b);
         b.reverse ();
         print ("reversed", b);
+        myassert("reverse big list", toString(b).equals("1.00 2.00 3.00 3.00 4.00 4.00 5.00 5.00 6.00 6.00 "));
     }
     private static void testRemove () {
         // TODO: add assertions
         MyLinked b = new MyLinked ();
         b.remove (4);
         print ("removed 4 from empty", b);
+        myassert("remove 4 from empty", toString(b).equals(""));
         b.add (1);
         b.remove (4);
-        print ("removed 4 from singelton", b);
+        print ("removed 4 from singleton", b);
+        myassert("remove 4 from singleton", toString(b).equals("1.00 "));
         b.remove (1);
-        print ("removed 1 from singelton", b);
+        print ("removed 1 from singleton", b);
+        myassert("remove 1 from singleton", toString(b).equals(""));
         for (double i = 1; i < 5; i++) {
             b.add (i);
             b.add (i);
@@ -244,22 +264,45 @@ public class MyLinked {
         print ("longer list", b);
         b.remove (9);
         print ("removed all 9s", b); // does nothing
+        myassert("remove 9", toString(b).equals("4.00 4.00 4.00 4.00 4.00 3.00 3.00 3.00 3.00 3.00 2.00 2.00 " +
+                "2.00 2.00 2.00 1.00 1.00 1.00 1.00 1.00 4.00 4.00 3.00 3.00 2.00 2.00 1.00 1.00 "));
         b.remove (3);
         print ("removed all 3s", b);
+        myassert("remove 3", toString(b).equals("4.00 4.00 4.00 4.00 4.00 2.00 2.00 " +
+                "2.00 2.00 2.00 1.00 1.00 1.00 1.00 1.00 4.00 4.00 2.00 2.00 1.00 1.00 "));
         b.remove (1);
         print ("removed all 1s", b);
+        myassert("remove 1", toString(b).equals("4.00 4.00 4.00 4.00 4.00 2.00 2.00 " +
+                "2.00 2.00 2.00 4.00 4.00 2.00 2.00 "));
         b.remove (4);
         print ("removed all 4s", b);
+        myassert("remove 4", toString(b).equals("2.00 2.00 2.00 2.00 2.00 2.00 2.00 "));
         b.remove (2);
         print ("removed all 2s", b); // should be empty
+        myassert("remove 2", toString(b).equals(""));
+
     }
 
     public static void main (String args[]) {
-        // testMax ();
-        // testMaxRecursive ();
-        // testDelete ();
-        // testReverse ();
-        // testRemove ();
+        StdOut.println("");
+        StdOut.println("Test max()");
+        testMax ();
+        StdOut.println("");
+
+        StdOut.println("Test maxRecursive()");
+        testMaxRecursive ();
+        StdOut.println("");
+
+        StdOut.println("Test delete()");
+        testDelete ();
+        StdOut.println("");
+
+        StdOut.println("Test reverse()");
+        testReverse ();
+        StdOut.println("");
+
+        StdOut.println("Test remove()");
+        testRemove ();
     }
 }
 
