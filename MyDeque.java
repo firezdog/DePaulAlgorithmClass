@@ -1,6 +1,8 @@
 // Exercise 1.3.33
 package algs13;
-import stdlib.*;
+
+import stdlib.StdOut;
+
 import java.util.NoSuchElementException;
 
 /**
@@ -14,7 +16,7 @@ import java.util.NoSuchElementException;
  * As always, you must not change the declaration of any method.
  * Do not change any of the methods I have provided, such as "toString" and "check".
  */
-public class MyDeque {
+public class MyDeque_copy {
 
     Node first = null;
     Node last = null;
@@ -76,7 +78,7 @@ public class MyDeque {
             first = first.next;
             first.prev = null;
         }
-        else if (N == 1) annihilate();
+        else if (N == 1) annihilate(this);
         N--;
         return item;
     }
@@ -92,13 +94,13 @@ public class MyDeque {
             last = last.prev;
             last.next = null;
         }
-        else if (N == 1) annihilate();
+        else if (N == 1) annihilate(this);
         N--;
         return item;
     }
 
-    private void annihilate() {
-        first = last = null;
+    private void annihilate(MyDeque_copy d) {
+        d.first = d.last = null;
     }
 
     // exercise 1.3.47 
@@ -111,8 +113,23 @@ public class MyDeque {
     // therefore it should not call pushLeft or pushRight.
     // Do not use a loop or a recursive definition.
     //
-    public void concat (MyDeque that) {
-        //TODO -- see comments above
+    public void concat (MyDeque_copy that) {
+        if (that.first == null) return;
+        if (this.first == null && that.first == null) return;
+        if (this.first == null) {
+            this.first = that.first;
+            this.last = that.last;
+            annihilate(that);
+        }
+        else {
+            this.last.next = that.first;
+            that.first.prev = this.last;
+            // don't forget to move the last of this to that
+            this.last = that.last;
+            annihilate(that);
+        }
+        this.N += that.N;
+        that.N = 0;
     }
 
     
@@ -124,8 +141,38 @@ public class MyDeque {
     // You can use a loop or a recursive definition here.
     //
     public int delete (int k) {
-        //TODO -- see comments above
-        return 0;
+        int item;
+        // this also covers the case where N is 0
+        if (k < 0 || k > N - 1) throw new IndexOutOfBoundsException();
+        // special case: delete only
+        if (N == 1) {
+            item = first.item;
+            annihilate(this);
+        }
+        else if (k == 0) {
+            item = first.item;
+            first = first.next;
+            first.prev = null;
+        }
+        else if (k == N - 1) {
+            item = last.item;
+            last = last.prev;
+            last.next = null;
+        }
+        else {
+            Node curr = first;
+            for (int i = 0; i < k; i++) {
+                curr = curr.next;
+            }
+            item = curr.item;
+            Node prev = curr.prev;
+            Node next = curr.next;
+            prev.next = curr.next;
+            next.prev = curr.prev;
+            curr = null;
+        }
+        N--;
+        return item;
     }
 
     public String toString () {
@@ -182,13 +229,13 @@ public class MyDeque {
     public static void main (String args[]) {
         // Here are some tests to get you started.
         // You can edit this all you like.
-        MyDeque d1, d2, d3;
+        MyDeque_copy d1, d2, d3;
         Integer k;
         
         ////////////////////////////////////////////////////////////////////
         // push/pop tests
         ////////////////////////////////////////////////////////////////////
-        d1 = new MyDeque ();
+        d1 = new MyDeque_copy();
         d1.pushLeft (11);
         d1.check ("[11]");
         d1.pushLeft (12);
@@ -202,7 +249,7 @@ public class MyDeque {
         k = d1.popLeft ();
         d1.check (11, k, "[]");
 
-        d1 = new MyDeque ();
+        d1 = new MyDeque_copy();
         d1.pushRight (11);
         d1.check ("[11]");
         d1.pushRight (12);
@@ -231,24 +278,24 @@ public class MyDeque {
         ////////////////////////////////////////////////////////////////////
         // concat tests (and more push/pop tests)
         ////////////////////////////////////////////////////////////////////
-        d1 = new MyDeque ();
-        d1.concat (new MyDeque ());
+        d1 = new MyDeque_copy();
+        d1.concat (new MyDeque_copy());
         d1.check ("[]");
         d1.pushLeft (11);
-        d1.concat (new MyDeque ());
+        d1.concat (new MyDeque_copy());
         d1.check ("[11]");
 
-        d1 = new MyDeque ();
-        d2 = new MyDeque ();
+        d1 = new MyDeque_copy();
+        d2 = new MyDeque_copy();
         d2.pushLeft (11);
         d1.concat (d2);
         d1.check ("[11]");
 
-        d1 = new MyDeque ();
+        d1 = new MyDeque_copy();
         for (int i = 10; i < 15; i++) { d1.pushLeft (i); d1.checkInvariants (); }
         for (int i = 20; i < 25; i++) { d1.pushRight (i); d1.checkInvariants (); }
         d1.check ("[14 13 12 11 10 20 21 22 23 24]");
-        d2 = new MyDeque ();
+        d2 = new MyDeque_copy();
         d1.concat (d2);
         d1.check ("[14 13 12 11 10 20 21 22 23 24]");
         d2.check ("[]");
@@ -257,7 +304,7 @@ public class MyDeque {
         for (int i = 40; i < 45; i++) { d2.pushRight (i); d2.checkInvariants (); }
         d2.check ("[34 33 32 31 30 40 41 42 43 44]");
 
-        d3 = new MyDeque ();
+        d3 = new MyDeque_copy();
         d2.concat (d3);
         d2.check ("[34 33 32 31 30 40 41 42 43 44]");
         d3.check ("[]");
@@ -270,7 +317,7 @@ public class MyDeque {
         ////////////////////////////////////////////////////////////////////
         // delete tests
         ////////////////////////////////////////////////////////////////////
-        d1 = new MyDeque ();
+        d1 = new MyDeque_copy();
         d1.pushLeft (11);
         d1.delete (0);
         d1.check ("[]");
