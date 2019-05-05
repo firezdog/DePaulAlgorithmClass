@@ -1,12 +1,9 @@
 // Exercise 1.4.31
 package algs14;
-
 import algs13.ResizingArray;
-import algs13.ResizingArrayStack;
-import stdlib.StdOut;
-import stdlib.Stopwatch;
-
+import stdlib.*;
 import java.util.NoSuchElementException;
+import algs13.ResizingArrayStack;
 
 /*
 Here is the kind of output I get before fixing the move method.
@@ -58,7 +55,7 @@ This is due to garbage collection and other system effects.
  4096000     0.2   2.4
  */
 
-public class MyDequeUsingStacksCopy<T> {
+public class MyDequeUsingStacks<T> {
     ResizingArrayStack<T> sl  = new ResizingArrayStack<>();
     ResizingArrayStack<T> sr  = new ResizingArrayStack<>();
     public boolean isEmpty ()      { return sl.isEmpty() && sr.isEmpty(); }
@@ -134,7 +131,7 @@ public class MyDequeUsingStacksCopy<T> {
         if (!iExpected.equals (iActual)) throw new Error ("Expected \"" + iExpected + "\", got \"" + iActual + "\"");
     }
     private static void correctnessTest () {
-        MyDequeUsingStacksCopy<Integer> d1 = new MyDequeUsingStacksCopy<>();
+        MyDequeUsingStacks<Integer> d1 = new MyDequeUsingStacks<> ();
         d1.pushLeft(0);
         d1.pushLeft(1);
         d1.pushLeft(2);
@@ -223,7 +220,7 @@ public class MyDequeUsingStacksCopy<T> {
 
     private static double timeTrial(int N) {
         int NUM_TRIALS = 10;
-        MyDequeUsingStacksCopy<Integer> d1 = new MyDequeUsingStacksCopy<>();
+        MyDequeUsingStacks<Integer> d1 = new MyDequeUsingStacks<> ();
         Stopwatch sw = new Stopwatch ();
         for (int trial=0; trial < NUM_TRIALS; trial++) {
             for (int i=0; i<2*N; i++) {
