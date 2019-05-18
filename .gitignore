@@ -6,3 +6,4 @@ out
 *production*
 workspace
 *.png
+*.vscode
