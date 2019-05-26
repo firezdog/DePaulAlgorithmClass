@@ -147,16 +147,51 @@ public class MyLinkedSort {
         }
 	}
 
-    public static void main (String args[]) {
-        int[] a1 = new int[1000000];
-		for (int i = 0; i < a1.length; i++)
-			a1[i] = i;
-		StdRandom.shuffle (a1);
-		MyLinkedSort b1 = new MyLinkedSort ();
-		for (int i:a1) b1.add(i);
+	private static void sampleSort() {
+        StdOut.println("=============SAMPLE SORT==================");
+	    int[] al = new int[20];
+        for (int i = 0; i < al.length; i++)
+            al[i] = i;
+        StdRandom.shuffle (al);
+        MyLinkedSort b1 = new MyLinkedSort ();
+        for (int i:al) b1.add(i);
         MyLinkedSort.print("before sort", b1.first);
         Node res1 = MyLinkedSort.sort(b1.first);
         MyLinkedSort.print("after sort", res1);
+    }
+
+	private static void doubleTest() {
+        double time = 0;
+        double prevTime;
+        int N = 256;
+        double avg = 0;
+        StdOut.println("=============DOUBLING TEST================");
+        StdOut.printf("%10s %10s %10s\n", "N", "time", "ratio");
+        StdOut.println("==========================================");
+        for (int t = 1; t <= 12; t++) {
+            prevTime = time;
+            N *= 2;
+            int[] a1 = new int[N];
+            for (int i = 0; i < a1.length; i++)
+                a1[i] = i;
+            StdRandom.shuffle (a1);
+            MyLinkedSort b1 = new MyLinkedSort ();
+            for (int i:a1) b1.add(i);
+            Stopwatch sw = new Stopwatch();
+            Node res1 = MyLinkedSort.sort(b1.first);
+            time = sw.elapsedTime();
+            double ratio = time / prevTime;
+            // otherwise ratio is very close to 0?
+            if (ratio >= 0 && prevTime != 0) avg += ratio;
+            StdOut.printf ("%10d %10.3f %10.3f\n", N, time, time / prevTime);
+        }
+        avg = avg / 12;
+        StdOut.printf("Average doubling ratio: %5.3f\n", avg);
+    }
+
+    public static void main (String args[]) {
+	    sampleSort();
+	    doubleTest();
         // Follow the above pattern to write a doubling test
         // to calculate ratios.  Starting from size 200 and going
         // to size 200 x 4096
