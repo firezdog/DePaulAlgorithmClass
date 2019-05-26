@@ -157,7 +157,16 @@ public class MyLinkedSort {
         for (int i:al) b1.add(i);
         MyLinkedSort.print("before sort", b1.first);
         Node res1 = MyLinkedSort.sort(b1.first);
+        checkSorted(res1);
         MyLinkedSort.print("after sort", res1);
+    }
+
+    private static void checkSorted(Node resl) {
+	    Node walker = resl;
+	    while (walker.next != null) {
+	        if (walker.item > walker.next.item) throw new IllegalStateException();
+	        walker = walker.next;
+        }
     }
 
 	private static void doubleTest() {
@@ -180,6 +189,7 @@ public class MyLinkedSort {
             Stopwatch sw = new Stopwatch();
             Node res1 = MyLinkedSort.sort(b1.first);
             time = sw.elapsedTime();
+            checkSorted(res1);
             double ratio = time / prevTime;
             // otherwise ratio is very close to 0?
             if (ratio >= 0 && prevTime != 0) avg += ratio;
