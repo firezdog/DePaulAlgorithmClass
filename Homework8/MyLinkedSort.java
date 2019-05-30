@@ -112,7 +112,20 @@ public class MyLinkedSort {
             c = t;
         }
         return new Node[] {l, r};
-	  }
+	}
+
+	/*static public Node[] split(Node l) {
+	    Node r = l;
+	    Node walker = l;
+	    while (walker.next != null && walker.next.next != null) {
+	        walker = walker.next.next;
+	        r = r.next;
+        }
+	    Node temp = r;
+	    r = r.next;
+	    temp.next = null;
+	    return new Node[] {l, r};
+    }*/
 	
 	static public Node merge(Node lt, Node rt){
 	    // merge creates a new LinkedList
@@ -177,7 +190,7 @@ public class MyLinkedSort {
         StdOut.println("=============DOUBLING TEST================");
         StdOut.printf("%10s %10s %10s\n", "N", "time", "ratio");
         StdOut.println("==========================================");
-        for (int t = 1; t <= 12; t++) {
+        for (int t = 1; t <= 17; t++) {
             prevTime = time;
             N *= 2;
             int[] a1 = new int[N];
