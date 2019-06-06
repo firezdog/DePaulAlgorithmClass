@@ -3,6 +3,9 @@ package algs24;
 import stdlib.StdIn;
 import stdlib.StdOut;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 
@@ -19,7 +22,7 @@ import java.util.NoSuchElementException;
  */
 
 public class PtrHeap<K extends Comparable<? super K>> {
-	
+
 	static class Node<K> {
 		K value;
 		Node<K> parent;
@@ -33,44 +36,52 @@ public class PtrHeap<K extends Comparable<? super K>> {
 		if (aVal.compareTo(bVal) < 0) return true;
 		return false;
 	}
-	
+
 	private int size;
 	private Node<K> root;
-	
-    boolean isRoot(Node<K> n){ return n == root; }
-    
-    Node<K> find(int n){
-    	if (n < 1 || n > size) throw new NoSuchElementException();
-    	if (n == 1) return root;
-    	String directions = Integer.toBinaryString(n);
-    	Node walker = root;
-    	for (int i = 1; i < directions.length(); i++) {
-    		if (directions.charAt(i) == '0') walker = walker.lchild;
-    		else walker = walker.rchild;
-		}
-    	return walker;
-	}
-	
-	void exch(Node<K> n1, Node<K> n2) {
-    	K temp = n1.value;
-    	n1.value = n2.value;
-    	n2.value = temp;
+
+	boolean isRoot(Node<K> n) {
+		return n == root;
 	}
 
-	/** Create an empty priority queue  */
+	Node<K> find(int n) {
+		if (n < 1 || n > size) throw new NoSuchElementException();
+		if (n == 1) return root;
+		String directions = Integer.toBinaryString(n);
+		Node walker = root;
+		for (int i = 1; i < directions.length(); i++) {
+			if (directions.charAt(i) == '0') walker = walker.lchild;
+			else walker = walker.rchild;
+		}
+		return walker;
+	}
+
+	void exch(Node<K> n1, Node<K> n2) {
+		K temp = n1.value;
+		n1.value = n2.value;
+		n2.value = temp;
+	}
+
+	/**
+	 * Create an empty priority queue
+	 */
 	public PtrHeap() {
 		size = 0;
 		root = null;
 	}
-    
-	/** Is the priority queue empty? */
-	public boolean isEmpty() { 
+
+	/**
+	 * Is the priority queue empty?
+	 */
+	public boolean isEmpty() {
 		return size == 0;
 	}
-	
 
-	/** Return the number of items on the priority queue. */
-	public int size() { 
+
+	/**
+	 * Return the number of items on the priority queue.
+	 */
+	public int size() {
 		return size;
 	}
 
@@ -91,7 +102,9 @@ public class PtrHeap<K extends Comparable<? super K>> {
 		}
 	}
 
-	/** Add a new key to the priority queue. */
+	/**
+	 * Add a new key to the priority queue.
+	 */
 	public void insert(K x) {
 		// add node to end.
 		Node child = new Node();
@@ -138,17 +151,16 @@ public class PtrHeap<K extends Comparable<? super K>> {
 
 	private void sink(Node n) {
 		Node current = n;
-		boolean hasLeftChild = current.lchild != null;
-		while (hasLeftChild && !lessThan(current.lchild, current)) {
-			boolean hasRightChild = current.rchild != null;
-			if (hasRightChild && lessThan(current.lchild, current.rchild)) {
-				exch(current, current.rchild);
-				current = current.rchild;
-			} else {
-				exch(current, current.lchild);
-				current = current.lchild;
-			}
-			hasLeftChild = current.lchild != null;
+		boolean hasLChild = current.lchild != null;
+		boolean hasRChild = current.rchild != null;
+		while (hasLChild) {
+			Node bigKid = current.lchild;
+			if (hasRChild && lessThan(bigKid, current.rchild)) bigKid = current.rchild;
+			if (!lessThan(current, bigKid)) break;
+			exch(current, bigKid);
+			current = bigKid;
+			hasLChild = current.lchild != null;
+			hasRChild = current.rchild != null;
 		}
 	}
 
@@ -160,7 +172,7 @@ public class PtrHeap<K extends Comparable<? super K>> {
 		if (this.isEmpty()) return "[]\n";
 		int levels = (int) (Math.log(size) / Math.log(2));
 		int currentLevel = 1;
-		Node[] children = new Node[] {root};
+		Node[] children = new Node[]{root};
 		String s = "";
 		while (currentLevel <= levels + 1) {
 			Node[] grandChildren = new Node[(int) Math.pow(2, currentLevel)];
@@ -172,7 +184,7 @@ public class PtrHeap<K extends Comparable<? super K>> {
 				grandChildren[position++] = currentParent.lchild;
 				grandChildren[position++] = currentParent.rchild;
 			}
-			s+="\n";
+			s += "\n";
 			children = grandChildren;
 			currentLevel++;
 		}
@@ -188,7 +200,7 @@ public class PtrHeap<K extends Comparable<? super K>> {
 	private String showNode(Node n) {
 		if (n == null) return "";
 		String s = n.value + " ";
-		s+= showNode(n.lchild) + showNode(n.rchild);
+		s += showNode(n.lchild) + showNode(n.rchild);
 		return s;
 	}
 
@@ -197,20 +209,80 @@ public class PtrHeap<K extends Comparable<? super K>> {
 		return showHeapTraversal();
 	}
 
-	public static void main(String[] args) {
+	static void randomSortTest() throws TestException {
+		PtrHeap<Integer> pq = new PtrHeap<>();
+		Integer[] sample_array = new Integer[50];
+		for (int i = 0; i < 50; i++) { sample_array[i] = i + 1; }
+		List<Integer> sample_list = Arrays.asList(sample_array);
+		Collections.shuffle(sample_list);
+		for (int i : sample_list) {
+			pq.insert(i);
+		}
+		for (int i = 0; i < 50; i++) {
+			sample_array[i] = pq.delMax();
+		}
+		Integer[] result = new Integer[50];
+		for (int i = 0; i < 50; i++) {
+			result[i] = 50 - i;
+		}
+		if (!Arrays.equals(sample_array, result))
+			throw new TestException("Result of successive de-queues is incorrect: " + Arrays.deepToString(sample_array));
+	}
+
+	static void test() throws TestException {
+		// a queue is empty on construction and of size 0
+		PtrHeap<Integer> pq = new PtrHeap<>();
+		StdOut.println("New priority queue created.");
+		if (pq.size() != 0) throw new TestException("Expected size: 0 -- actual size: " + pq.size());
+		if (!pq.isEmpty()) throw new TestException("Priority queue should be empty.");
+		// De-queueing empty queue causes exception.
+		StdOut.println("Trying to dequeue from empty queue");
+		try { pq.delMax(); } catch(Exception t) {
+			if (!(t instanceof NoSuchElementException)) throw new TestException("Correct exception was not thrown when deleting from empty queue");
+		}
+		// after N enqueues, queue is not empty and size is N.
+		StdOut.println("Enqueueing 10 numbers from 1 to 10");
+		for (int i = 0; i < 10; i++) {
+			pq.insert(i);
+		}
+		if (pq.isEmpty()) throw new TestException("Priority queue should not be empty.");
+		if (pq.size() != 10) throw new TestException("Expected size: 10 -- actual size: " + pq.size());
+		// Randomly enqueueing 10 items from 1 to 10 and then deleting max 10 times should yield numbers 10 to 1.
+		StdOut.println("Randomly enqueueing and de-queueing numbers from 1 to 50, 100 times");
+		for (int i = 0; i < 100; i++) {
+			randomSortTest();
+		}
+	}
+
+	private static class TestException extends Exception {
+		public TestException(String message) {
+			super(message);
+		}
+	}
+
+	static void sampleOutput() {
 		PtrHeap<String> pq = new PtrHeap<>();
 		// StdIn.fromString("1 2 3 4 5 6 7 8 - - - - - - - - 8 7 6 5 4 3 2 1 - - - - - - - -");
 		StdIn.fromString("10 20 30 40 50 - - - 05 25 35 - - - 70 80 05 - - - - ");
 		while (!StdIn.isEmpty()) {
 			StdOut.println ("pq:  "); pq.showHeap();
 			String item = StdIn.readString();
+			StdOut.println("Old size: " + pq.size());
 			if (item.equals("-")) StdOut.println("deleting max: " + pq.delMax());
 			else {
 				pq.insert(item);
 				StdOut.println("inserted " + item);
 			}
+			StdOut.println("New size: " + pq.size());
 		}
 		StdOut.println("(" + pq.size() + " left on pq)");
+	}
+
+	public static void main(String[] args) {
+		StdOut.println("================== TESTING ===================");
+		try { test(); } catch (TestException t) { StdOut.println(t); }
+		StdOut.println("=================SAMPLE OUTPUT================");
+		sampleOutput();
 	}
 
 }
