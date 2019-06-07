@@ -209,21 +209,21 @@ public class PtrHeap<K extends Comparable<? super K>> {
 		return showHeapTraversal();
 	}
 
-	static void randomSortTest() throws TestException {
+	static void randomSortTest(int size) throws TestException {
 		PtrHeap<Integer> pq = new PtrHeap<>();
-		Integer[] sample_array = new Integer[50];
-		for (int i = 0; i < 50; i++) { sample_array[i] = i + 1; }
+		Integer[] sample_array = new Integer[size];
+		for (int i = 0; i < size; i++) { sample_array[i] = i + 1; }
 		List<Integer> sample_list = Arrays.asList(sample_array);
 		Collections.shuffle(sample_list);
 		for (int i : sample_list) {
 			pq.insert(i);
 		}
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < size; i++) {
 			sample_array[i] = pq.delMax();
 		}
-		Integer[] result = new Integer[50];
-		for (int i = 0; i < 50; i++) {
-			result[i] = 50 - i;
+		Integer[] result = new Integer[size];
+		for (int i = 0; i < size; i++) {
+			result[i] = size - i;
 		}
 		if (!Arrays.equals(sample_array, result))
 			throw new TestException("Result of successive de-queues is incorrect: " + Arrays.deepToString(sample_array));
@@ -248,9 +248,11 @@ public class PtrHeap<K extends Comparable<? super K>> {
 		if (pq.isEmpty()) throw new TestException("Priority queue should not be empty.");
 		if (pq.size() != 10) throw new TestException("Expected size: 10 -- actual size: " + pq.size());
 		// Randomly enqueueing 10 items from 1 to 10 and then deleting max 10 times should yield numbers 10 to 1.
-		StdOut.println("Randomly enqueueing and de-queueing numbers from 1 to 50, 100 times");
+		int sampleSize = 250;
+		int trialSize = 100;
+		StdOut.println("Randomly enqueueing and de-queueing numbers from 1 to " + sampleSize + ", " + trialSize + " times");
 		for (int i = 0; i < 100; i++) {
-			randomSortTest();
+			randomSortTest(sampleSize);
 		}
 	}
 
